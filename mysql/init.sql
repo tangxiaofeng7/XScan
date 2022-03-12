@@ -44,7 +44,7 @@ CREATE TABLE `platform` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 LOCK TABLES `platform` WRITE;
-INSERT INTO `platform` VALUES (1,'fofa','netwarks@163.com','ba852a7e982095cb13d4840cfe987be0'),(2,'hunter','等待更新','等待更新'),(3,'zoomeye','等待更新','等待更新'),(4,'shodan','等待更新','等待更新'),(5,'360quake','等待更新','等待更新');
+INSERT INTO `platform` VALUES (1,'fofa','xxxxxxx','xxxxxxx'),(2,'hunter','xxxxx','xxxxxx'),(3,'zoomeye','waiting','waiting'),(4,'shodan','waiting','waiting'),(5,'360quake','waiting','waiting');
 UNLOCK TABLES;
 
 

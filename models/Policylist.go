@@ -31,7 +31,6 @@ func GetPolicylist(pageNum int, pageSize int, maps interface{}) (policylist []Po
 	if querys["platform"] != nil {
 		dbTmp = dbTmp.Where("platform LIKE ?", "%"+querys["platform"].(string)+"%")
 	}
-	//fmt.Println(querys)
 
 	dbTmp.Offset(pageNum).Limit(pageSize).Order("id  desc").Find(&policylist)
 	return
@@ -83,13 +82,13 @@ func DoPolicylist(id int) (bool, int) {
 	db.Where("id = " + strconv.Itoa(id)).Find(&Policylist)
 
 	if Policylist.Platform == "fofa" {
-		fmt.Println("fofa任务...doing...")
-		total, total_success := FofaSearchTotal(Policylist.Rule)
-		fmt.Println("total总数为", total)
 
-		if total_success {
-			res := (total + 500) / 500
+		fmt.Println("fofa任务......")
+		fofaTotal, fofaTotalSuccess := FofaSearchTotal(Policylist.Rule)
+		fmt.Println("total总数为", fofaTotal)
 
+		if fofaTotalSuccess {
+			res := (fofaTotal + 500) / 500
 			fmt.Println("res为", res)
 			for i := 1; i <= res; i++ {
 				FofaSearch(Policylist.Task, Policylist.Rule, 500, i)
@@ -98,20 +97,32 @@ func DoPolicylist(id int) (bool, int) {
 		}
 
 	} else if Policylist.Platform == "zoomeye" {
+
 		fmt.Println("zoomeye任务")
 	} else if Policylist.Platform == "hunter" {
-		fmt.Println("hunter任务")
-	}
 
+		fmt.Println("hunter任务......")
+		hunterTotal, hunterTotalSuccess := HunterSearchTotal(Policylist.Rule)
+		fmt.Println("total总数为", hunterTotal)
+		if hunterTotalSuccess {
+			res := (hunterTotal + 100) / 100
+			fmt.Println("res为", res)
+			for i := 1; i <= res; i++ {
+				HunterSearch(Policylist.Task, Policylist.Rule, 100, i)
+			}
+			return true, id
+		}
+	}
 	return true, id
 }
 
+//fofa
 func FofaSearch(task, rule string, size, page int) bool {
 	email, key, ok := GetPlat("fofa")
 	//数据库中存在fofa的账号
 	if ok {
 		rule = base64.StdEncoding.EncodeToString([]byte(rule))
-		url := fmt.Sprintf("https://fofa.info//api/v1/search/all?email=%s&key=%s&qbase64=%s&size=%d&page=%d&fields=title,ip,domain,port,server,protocol", email, key, rule, size, page)
+		url := fmt.Sprintf("https://fofa.info//api/v1/search/all?email=%s&key=%s&qbase64=%s&size=%d&page=%d&fields=host,title,ip,domain,port,server,protocol", email, key, rule, size, page)
 		fmt.Println(url)
 		res, err := http.Get(url)
 		if err != nil {
@@ -123,14 +134,15 @@ func FofaSearch(task, rule string, size, page int) bool {
 		for _, v := range value.GetArray("results") {
 			data := make(map[string]interface{})
 			data["task"] = task
-			data["title"] = v.([]interface{})[0]
-			data["ip"] = v.([]interface{})[1]
-			data["domain"] = v.([]interface{})[2]
-			data["port"] = v.([]interface{})[3]
-			data["server"] = v.([]interface{})[4]
-			data["protocol"] = v.([]interface{})[5]
-			ipisexit := fmt.Sprintf("%s", v.([]interface{})[1])
-			portisexit := fmt.Sprintf("%s", v.([]interface{})[3])
+			data["host"] = v.([]interface{})[0]
+			data["title"] = v.([]interface{})[1]
+			data["ip"] = v.([]interface{})[2]
+			data["domain"] = v.([]interface{})[3]
+			data["port"] = v.([]interface{})[4]
+			data["server"] = v.([]interface{})[5]
+			data["protocol"] = v.([]interface{})[6]
+			ipisexit := fmt.Sprintf("%s", v.([]interface{})[2])
+			portisexit := fmt.Sprintf("%s", v.([]interface{})[4])
 			b, _ := ExistFofalist(ipisexit, portisexit)
 			fmt.Println("查询数据库中资产是否存在", ipisexit, portisexit, b)
 			if !b {
@@ -162,6 +174,76 @@ func FofaSearchTotal(rule string) (total int, total_success bool) {
 
 		total, _ := strconv.Atoi(b)
 
+		return total, true
+	} else {
+		return 0, false
+	}
+}
+
+// hunter
+func HunterSearch(task, rule string, size, page int) bool {
+	username, key, ok := GetPlat("hunter")
+	//数据库中存在hunter的账号
+	if ok {
+		rule = base64.StdEncoding.EncodeToString([]byte(rule))
+		url := fmt.Sprintf("https://hunter.qianxin.com/openApi/search?username=%s&api-key=%s&search=%s&page=%d&page_size=%d&is_web=1", username, key, rule, page, size)
+		fmt.Println(url)
+		res, err := http.Get(url)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer res.Body.Close()
+		result, _ := ioutil.ReadAll(res.Body)
+		value, _ := gjson.LoadContent(string(result))
+
+		for _, v := range value.GetArray("data.arr") {
+			data := make(map[string]interface{})
+			data["task"] = task
+			data["url"] = fmt.Sprintf("%v", v.(map[string]interface{})["url"])
+			data["title"] = fmt.Sprintf("%v", v.(map[string]interface{})["web_title"])
+			data["ip"] = fmt.Sprintf("%v", v.(map[string]interface{})["ip"])
+			data["domain"] = fmt.Sprintf("%v", v.(map[string]interface{})["domain"])
+			data["port"] = fmt.Sprintf("%v", v.(map[string]interface{})["port"])
+			data["protocol"] = fmt.Sprintf("%v", v.(map[string]interface{})["protocol"])
+			data["code"] = fmt.Sprintf("%v", v.(map[string]interface{})["status_code"])
+			data["number"] = fmt.Sprintf("%v", v.(map[string]interface{})["number"])
+			data["company"] = fmt.Sprintf("%v", v.(map[string]interface{})["company"])
+			data["isp"] = fmt.Sprintf("%v", v.(map[string]interface{})["isp"])
+			AddHunterlist(data)
+
+			ipisexit := fmt.Sprintf("%v", v.(map[string]interface{})["ip"])
+			portisexit := fmt.Sprintf("%v", v.(map[string]interface{})["port"])
+			b, _ := ExistHunterlist(ipisexit, portisexit)
+			fmt.Println("查询数据库中资产是否存在", ipisexit, portisexit, b)
+			if !b {
+				AddHunterlist(data)
+			}
+		}
+		return true
+	} else {
+		return false
+	}
+}
+
+func HunterSearchTotal(rule string) (total int, total_success bool) {
+	username, key, ok := GetPlat("hunter")
+	//数据库中存在hunter的账号
+	if ok {
+		rule = base64.StdEncoding.EncodeToString([]byte(rule))
+		url := fmt.Sprintf("https://hunter.qianxin.com/openApi/search?username=%s&api-key=%s&search=%s&page=1&page_size=1&is_web=1", username, key, rule)
+		fmt.Println(url)
+		res, err := http.Get(url)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer res.Body.Close()
+		result, _ := ioutil.ReadAll(res.Body)
+		value, _ := gjson.LoadContent(string(result))
+
+		a := value.GetArray("data.total")
+		var b string
+		b = fmt.Sprintf("%v", a[0])
+		total, _ := strconv.Atoi(b)
 		return total, true
 	} else {
 		return 0, false

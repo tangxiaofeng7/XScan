@@ -4,28 +4,32 @@ import (
 	"XScan/models"
 	"XScan/pkg/e"
 	"XScan/pkg/utils"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 )
 
-func GetFofalist(c *gin.Context) {
-	host := c.Query("host")
+func GetHunterlist(c *gin.Context) {
+
 	task := c.Query("task")
+	url := c.Query("url")
 	title := c.Query("title")
 	ip := c.Query("ip")
 	domain := c.Query("domain")
 	port := c.Query("port")
-	server := c.Query("server")
 	protocol := c.Query("protocol")
+	code := c.Query("code")
+	number := c.Query("number")
+	company := c.Query("company")
+	isp := c.Query("isp")
 
 	maps := make(map[string]interface{})
-	if host != "" {
-		maps["host"] = host
-	}
+
 	if task != "" {
 		maps["task"] = task
+	}
+	if url != "" {
+		maps["url"] = url
 	}
 	if title != "" {
 		maps["title"] = title
@@ -39,45 +43,51 @@ func GetFofalist(c *gin.Context) {
 	if port != "" {
 		maps["port"] = port
 	}
-	if server != "" {
-		maps["server"] = server
-	}
 	if protocol != "" {
 		maps["protocol"] = protocol
 	}
+	if code != "" {
+		maps["code"] = code
+	}
+	if number != "" {
+		maps["number"] = number
+	}
+	if company != "" {
+		maps["company"] = company
+	}
+	if isp != "" {
+		maps["isp"] = isp
+	}
 
-	code := e.SUCCESS
+	code1 := e.SUCCESS
 	pageSize, _ := strconv.Atoi(c.Query("pageSize"))
-	data := models.GetFofalist(utils.GetPage(c), pageSize, maps)
-	total := models.GetFofalistTotal(maps)
+	data := models.GetHunterlist(utils.GetPage(c), pageSize, maps)
+	total := models.GetHunterlistTotal(maps)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":  code,
-		"msg":   e.GetMsg(code),
+		"code":  code1,
+		"msg":   e.GetMsg(code1),
 		"data":  data,
 		"total": total,
 	})
 }
 
-//AddFofaWhite
+//AddhunterWhite
 
-type FofaWhite struct {
+type HunterWhite struct {
 	ID []int `json:"id"`
 }
 
-func AddFofaWhite(c *gin.Context) {
+func AddhunterWhite(c *gin.Context) {
 
-	json := FofaWhite{}
+	json := HunterWhite{}
 	c.BindJSON(&json)
 	var code int
 	maps := make(map[string]interface{})
-
 	maps["iswhite"] = true
 
-	fmt.Println(maps)
-
 	for _, v := range json.ID {
-		a := models.EditFofaWhite(v, maps)
+		a := models.EditHunterWhite(v, maps)
 		if a {
 			code = e.SUCCESS
 		} else {

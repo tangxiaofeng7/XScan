@@ -36,6 +36,7 @@ func Login(c *gin.Context) {
 			token, err := utils.GenerateToken(username, password)
 			if err != nil {
 				code = e.ERROR
+
 			} else {
 				data["token"] = token
 				code = e.SUCCESS
@@ -65,7 +66,7 @@ func CurrentUser(c *gin.Context) {
 
 	code := e.SUCCESS
 	data["name"] = claims.Username
-	data["avatar"] = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
+	data["avatar"] = "https://avatars.githubusercontent.com/u/45926593?v=4"
 	data["title"] = "脚本小子"
 
 	c.JSON(http.StatusOK, gin.H{

@@ -22,6 +22,7 @@ type Fofalist struct {
 func AddFofalist(data map[string]interface{}) {
 	fofalist := Fofalist{
 		Task:        data["task"].(string),
+		Host:        data["host"].(string),
 		Title:       data["title"].(string),
 		Ip:          data["ip"].(string),
 		Domain:      data["domain"].(string),
@@ -42,6 +43,9 @@ func GetFofalist(pageNum int, pageSize int, maps interface{}) (fofalist []Fofali
 
 	if querys["task"] != nil {
 		dbTmp = dbTmp.Where("task LIKE ?", "%"+querys["task"].(string)+"%")
+	}
+	if querys["host"] != nil {
+		dbTmp = dbTmp.Where("host LIKE ?", "%"+querys["host"].(string)+"%")
 	}
 	if querys["title"] != nil {
 		dbTmp = dbTmp.Where("title LIKE ?", "%"+querys["title"].(string)+"%")
@@ -72,6 +76,9 @@ func GetFofalistTotal(maps interface{}) (count int) {
 
 	if querys["task"] != nil {
 		dbTmp = dbTmp.Where("task LIKE ?", "%"+querys["task"].(string)+"%")
+	}
+	if querys["host"] != nil {
+		dbTmp = dbTmp.Where("host LIKE ?", "%"+querys["host"].(string)+"%")
 	}
 	if querys["title"] != nil {
 		dbTmp = dbTmp.Where("title LIKE ?", "%"+querys["title"].(string)+"%")
@@ -113,8 +120,7 @@ func EditFofaWhite(id int, data interface{}) bool {
 	return true
 }
 
-//获取数据
-//柱状图 近7日新增资产
+//获取welcome数据
 func GetValueByDay(updateTime string) (count int) {
 	db.Model(&Fofalist{}).Where("updated_time LIKE ?", "%"+updateTime+"%").Count(&count)
 	return
