@@ -2,9 +2,9 @@ package models
 
 import (
 	"fmt"
+	"github.com/gogf/gf/frame/g"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"log"
 )
 
 var db *gorm.DB
@@ -14,16 +14,22 @@ type Model struct {
 }
 
 func Setup() {
+	c := g.Cfg()
+
+	mysql := c.Get("database.mysql")
+	user := c.Get("database.user")
+	password := c.Get("database.password")
+	database := c.Get("database.database")
+
 	var err error
 	db, err = gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		"root",
-		"woaini520",
-		//"127.0.0.1:3306",
-		"mysql",
-		"xscan"))
+		user,
+		password,
+		mysql,
+		database))
 
 	if err != nil {
-		log.Fatalf("models.Setup err: %v", err)
+		g.Log().Error("数据库连接错误", err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {

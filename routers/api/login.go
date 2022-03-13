@@ -75,3 +75,45 @@ func CurrentUser(c *gin.Context) {
 		"data": data,
 	})
 }
+
+//EditPass
+// 修改密码
+func EditPass(c *gin.Context) {
+
+	json := make(map[string]interface{})
+	c.BindJSON(&json)
+	username := fmt.Sprintf("%v", json["name"])
+
+	oldPass := fmt.Sprintf("%v", json["old-password"])
+	newPass := fmt.Sprintf("%v", json["new-password"])
+	newPass2 := fmt.Sprintf("%v", json["new-password2"])
+
+	code := e.INVALID_DIFFPASS
+	if newPass != newPass2 {
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  "两次密码不一致",
+			"data": make(map[string]string),
+		})
+		return
+	}
+
+	valid := validation.Validation{}
+
+	code = e.INVALID_PASS
+	if !valid.HasErrors() {
+		isExist := models.CheckAuth(username, oldPass)
+		if isExist {
+			data := make(map[string]interface{})
+			data["password"] = newPass
+			models.EditAuth(username, data)
+			code = e.SUCCESS
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": make(map[string]string),
+	})
+}

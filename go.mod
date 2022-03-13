@@ -9,4 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/gogf/gf v1.16.6
 	github.com/jinzhu/gorm v1.9.16
+	github.com/shirou/gopsutil v3.21.11+incompatible
+	github.com/tklauser/go-sysconf v0.3.10 // indirect
+	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 )

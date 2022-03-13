@@ -20,27 +20,29 @@ func InitRouter() *gin.Engine {
 	apiv1 := r.Group("/api")
 	apiv1.Use(utils.JWT())
 	{
+		//平台配置
 		apiv1.GET("/platform", api.GetPlatform)
 		apiv1.PUT("/platform", api.EditPaltform)
-
+		//策略配置
 		apiv1.GET("/policy", api.GetPolicy)
 		apiv1.POST("/policy", api.AddPolicy)
 		apiv1.PUT("/policy", api.EditPolicy)
 		apiv1.DELETE("/policy", api.DelPolicy)
-
-		//执行规则
+		//执行侧露
 		apiv1.POST("/policyDo", api.DoPolicy)
-
-		//fofalist
+		//fofa结果
 		apiv1.GET("/fofalist", api.GetFofalist)
 		apiv1.POST("/fofalist", api.AddFofaWhite)
-
-		//hunterlist
+		//hunter结果
 		apiv1.GET("/hunterlist", api.GetHunterlist)
 		apiv1.POST("/hunterlist", api.AddhunterWhite)
-
-		//welcome
+		//欢迎界面
 		apiv1.GET("/welcome", api.GetWelcome)
+		//用户管理
+		apiv1.PUT("/editPass", api.EditPass)
+		apiv1.GET("/current", api.CurrentUser)
+		//服务器状态
+		apiv1.GET("/serverInfo", api.GetServerInfo) // 获取服务器信息
 	}
 	return r
 }

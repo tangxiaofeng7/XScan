@@ -116,7 +116,6 @@ func ExistFofalist(ip, port string) (bool, int) {
 
 func EditFofaWhite(id int, data interface{}) bool {
 	db.Model(&Fofalist{}).Where("id = ?", id).Updates(data)
-
 	return true
 }
 
