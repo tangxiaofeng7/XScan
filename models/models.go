@@ -14,19 +14,14 @@ type Model struct {
 }
 
 func Setup() {
-	c := g.Cfg()
-
-	mysql := c.Get("database.mysql")
-	user := c.Get("database.user")
-	password := c.Get("database.password")
-	database := c.Get("database.database")
 
 	var err error
 	db, err = gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		user,
-		password,
-		mysql,
-		database))
+		"root",
+		"woaini520",
+		//"127.0.0.1:3306",
+		"mysql",
+		"xscan"))
 
 	if err != nil {
 		g.Log().Error("数据库连接错误", err)
