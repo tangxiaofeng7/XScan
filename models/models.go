@@ -16,7 +16,7 @@ type Model struct {
 func Setup() {
 	c := g.Cfg()
 
-	//mysql := c.Get("database.mysql")
+	mysql := c.Get("database.mysql")
 	user := c.Get("database.user")
 	password := c.Get("database.password")
 	database := c.Get("database.database")
@@ -25,7 +25,7 @@ func Setup() {
 	db, err = gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		user,
 		password,
-		"mysql",
+		mysql,
 		database))
 
 	if err != nil {

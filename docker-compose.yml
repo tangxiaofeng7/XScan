@@ -4,7 +4,7 @@ services:
     build: ./mysql
     environment:
       - TZ=Asia/Shanghai
-      - MYSQL_DATABASE=suscan
+      - MYSQL_DATABASE=xscan
       - MYSQL_ROOT_PASSWORD=woaini520
     ports:
       - "3305:3306"
