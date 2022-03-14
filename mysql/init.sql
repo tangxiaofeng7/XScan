@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS xscan default charset utf8 COLLATE utf8_general_ci;
 use xscan;
 
@@ -13,9 +12,7 @@ CREATE TABLE `auth` (
 
 
 LOCK TABLES `auth` WRITE;
-/*!40000 ALTER TABLE `auth` DISABLE KEYS */;
 INSERT INTO `auth` VALUES (1,'admin','admin');
-/*!40000 ALTER TABLE `auth` ENABLE KEYS */;
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `fofalist`;
@@ -44,7 +41,7 @@ CREATE TABLE `platform` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 LOCK TABLES `platform` WRITE;
-INSERT INTO `platform` VALUES (1,'fofa','xxxxxxx','xxxxxxx'),(2,'hunter','xxxxx','xxxxxx'),(3,'zoomeye','waiting','waiting'),(4,'shodan','waiting','waiting'),(5,'360quake','waiting','waiting');
+INSERT INTO `platform` VALUES (1,'fofa','xxxix','xxxix'),(2,'hunter','xxxix','xxx-xxx'),(3,'zoomeye','waiting','waiting'),(4,'shodan','waiting','waiting'),(5,'360quake','waiting','waiting');
 UNLOCK TABLES;
 
 

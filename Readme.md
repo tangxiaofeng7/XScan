@@ -7,6 +7,12 @@ git clone https://github.com/tangxiaofeng7/XScan.git
 cd XScan
 docker-compose up -d
 ```
+#### 若安装过旧版本，可使用以下命令删除docker旧容器
+```
+docker stop $(docker ps -a | grep "xscan" | awk '{print $1}')
+docker rm $(docker ps -a | grep "xscan" | awk '{print $1}')
+docker rmi $(docker images | grep "scan" | awk '{print $3}')
+```
 
 ## 界面截图
 #### 欢迎界面
