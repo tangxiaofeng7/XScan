@@ -24,7 +24,7 @@ func Setup() {
 		"xscan"))
 
 	if err != nil {
-		g.Log().Error("数据库连接错误", err)
+		g.Log().Fatalf("数据库连接错误", err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
