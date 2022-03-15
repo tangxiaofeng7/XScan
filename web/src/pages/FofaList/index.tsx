@@ -99,7 +99,19 @@ const FofaList: React.FC = () => {
   return (
     <PageContainer ghost>
       <ProTable<API.GetFofalistItem, API.PageParams>
-        // headerTitle="各平台策略配置"
+        toolbar={{
+          actions: [
+            <Button
+              key="id"
+              type="primary"
+              onClick={async () => {
+                window.open(`/api/downfofaList`);
+              }}
+            >
+              批量导出
+            </Button>,
+          ],
+        }}
         actionRef={actionRef}
         rowKey="id"
         search={{

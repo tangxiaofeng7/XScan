@@ -144,8 +144,14 @@ export async function fofalist(
   });
 }
 
-//addfofawhite
+//downfofaList
+export async function downfofaList() {
+  return request('/downfofaList', {
+    method: 'GET',
+  });
+}
 
+//addfofawhite
 export async function addfofawhite(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/fofalist', {
     method: 'POST',
@@ -162,7 +168,6 @@ export async function welcome(options?: { [key: string]: any }) {
   });
 }
 
-
 //hunterlist
 export async function hunterlist(
   params: {
@@ -177,6 +182,13 @@ export async function hunterlist(
       ...params,
     },
     ...(options || {}),
+  });
+}
+
+export async function downhunterList() {
+  return request('/downhunterList', {
+    method: 'GET',
+    responseType: 'blob',
   });
 }
 

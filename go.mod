@@ -11,5 +11,6 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/tklauser/go-sysconf v0.3.10 // indirect
+	github.com/xuri/excelize/v2 v2.5.0
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 )

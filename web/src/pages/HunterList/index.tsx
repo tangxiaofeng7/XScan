@@ -115,6 +115,19 @@ const HunterList: React.FC = () => {
   return (
     <PageContainer ghost>
       <ProTable<API.GetFofalistItem, API.PageParams>
+        toolbar={{
+          actions: [
+            <Button
+              key="id"
+              type="primary"
+              onClick={async () => {
+                window.open(`/api/downhunterList`);
+              }}
+            >
+              批量导出
+            </Button>,
+          ],
+        }}
         actionRef={actionRef}
         rowKey="id"
         search={{

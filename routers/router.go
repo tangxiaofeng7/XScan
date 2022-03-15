@@ -16,6 +16,8 @@ func InitRouter() *gin.Engine {
 	//登陆接口
 	r.POST("/api/login", api.Login)
 	r.GET("/api/currentUser", api.CurrentUser)
+	r.GET("/api/downfofaList", api.DownFofaList)
+	r.GET("/api/downhunterList", api.DownHunterList)
 
 	apiv1 := r.Group("/api")
 	apiv1.Use(utils.JWT())
@@ -33,6 +35,8 @@ func InitRouter() *gin.Engine {
 		//fofa结果
 		apiv1.GET("/fofalist", api.GetFofalist)
 		apiv1.POST("/fofalist", api.AddFofaWhite)
+		//apiv1.POST("/downfofaList", api.DownFofaList)
+
 		//hunter结果
 		apiv1.GET("/hunterlist", api.GetHunterlist)
 		apiv1.POST("/hunterlist", api.AddhunterWhite)

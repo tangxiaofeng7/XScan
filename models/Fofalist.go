@@ -119,6 +119,12 @@ func EditFofaWhite(id int, data interface{}) bool {
 	return true
 }
 
+//GetAllDownFofaList
+func GetAllDownFofaList() (fofalist []Fofalist) {
+	db.Order("id  desc").Where("iswhite = ?", false).Find(&fofalist)
+	return
+}
+
 //获取welcome数据
 func GetValueByDay(updateTime string) (count int) {
 	db.Model(&Fofalist{}).Where("updated_time LIKE ?", "%"+updateTime+"%").Count(&count)

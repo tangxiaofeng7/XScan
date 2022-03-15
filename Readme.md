@@ -28,6 +28,7 @@ docker rmi $(docker images | grep "scan" | awk '{print $3}')
 ![img.png](images/sys.png)
 
 ## 最近更新
+[2022/3/15] 增加资产批量导出xlsx</p>
 [2022/3/13] 增加修改密码，增加平台系统展示</p>
 [2022/3/12] 增加Hunter支持</p>
 [2022/3/11] 前端后端初始版本编写完成</p>

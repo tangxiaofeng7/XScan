@@ -140,8 +140,7 @@ func EditHunterWhite(id int, data interface{}) bool {
 	return true
 }
 
-////获取welcome数据
-//func GetValueByDay(updateTime string) (count int) {
-//	db.Model(&Hunterlist{}).Where("updated_time LIKE ?", "%"+updateTime+"%").Count(&count)
-//	return
-//}
+func GetAllDownHunterList() (hunterlist []Hunterlist) {
+	db.Order("id  desc").Where("iswhite = ?", false).Find(&hunterlist)
+	return
+}

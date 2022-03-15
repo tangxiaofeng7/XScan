@@ -4,7 +4,9 @@ import (
 	"XScan/models"
 	"XScan/pkg/e"
 	"XScan/pkg/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/xuri/excelize/v2"
 	"net/http"
 	"strconv"
 )
@@ -100,4 +102,50 @@ func AddhunterWhite(c *gin.Context) {
 		"msg":  e.GetMsg(code),
 		"data": "",
 	})
+}
+
+//DownHunterList
+func DownHunterList(c *gin.Context) {
+
+	f := excelize.NewFile()
+	f.SetCellValue("Sheet1", "A1", "id")
+	f.SetCellValue("Sheet1", "B1", "task")
+	f.SetCellValue("Sheet1", "C1", "url")
+	f.SetCellValue("Sheet1", "D1", "title")
+	f.SetCellValue("Sheet1", "E1", "ip")
+	f.SetCellValue("Sheet1", "F1", "domain")
+	f.SetCellValue("Sheet1", "G1", "port")
+	f.SetCellValue("Sheet1", "H1", "protocol")
+	f.SetCellValue("Sheet1", "I1", "code")
+	f.SetCellValue("Sheet1", "J1", "number")
+	f.SetCellValue("Sheet1", "K1", "company")
+	f.SetCellValue("Sheet1", "L1", "isp")
+
+	result := models.GetAllDownHunterList()
+
+	for i, v := range result {
+		f.SetCellValue("Sheet1", "A"+strconv.Itoa(i+2), v.ID)
+		f.SetCellValue("Sheet1", "B"+strconv.Itoa(i+2), v.Task)
+		f.SetCellValue("Sheet1", "C"+strconv.Itoa(i+2), v.Url)
+		f.SetCellValue("Sheet1", "D"+strconv.Itoa(i+2), v.Title)
+		f.SetCellValue("Sheet1", "E"+strconv.Itoa(i+2), v.Ip)
+		f.SetCellValue("Sheet1", "F"+strconv.Itoa(i+2), v.Domain)
+		f.SetCellValue("Sheet1", "G"+strconv.Itoa(i+2), v.Port)
+		f.SetCellValue("Sheet1", "H"+strconv.Itoa(i+2), v.Protocol)
+		f.SetCellValue("Sheet1", "I"+strconv.Itoa(i+2), v.Code)
+		f.SetCellValue("Sheet1", "J"+strconv.Itoa(i+2), v.Number)
+		f.SetCellValue("Sheet1", "K"+strconv.Itoa(i+2), v.Company)
+		f.SetCellValue("Sheet1", "L"+strconv.Itoa(i+2), v.Isp)
+
+	}
+
+	if err := f.SaveAs("hunterliust.xlsx"); err != nil {
+		fmt.Println(err)
+	}
+
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=hunterliust.xlsx"))
+	c.Writer.Header().Add("Content-Type", "application/octet-stream")
+
+	c.File("./hunterliust.xlsx")
+
 }

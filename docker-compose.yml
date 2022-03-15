@@ -1,6 +1,7 @@
 version: '3'
 services:
   mysql:
+    container_name: mysql_container
     build: ./mysql
     environment:
       - TZ=Asia/Shanghai
@@ -23,6 +24,7 @@ services:
     depends_on:
       - mysql
     restart: always
+
     environment:
       - TZ=Asia/Shanghai
   web:
