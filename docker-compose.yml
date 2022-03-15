@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    container_name: mysql_container
+    container_name: mysql
     build: ./mysql
     environment:
       - TZ=Asia/Shanghai
