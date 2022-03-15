@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { queryState } from './service';
 import { useRequest } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';

@@ -7,7 +7,7 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import defaultSettings from '../config/defaultSettings';
-import { RequestConfig } from 'umi';
+import type { RequestConfig } from 'umi';
 
 const loginPath = '/user/login';
 
@@ -120,5 +120,3 @@ export const request: RequestConfig = {
     },
   ],
 };
-
-
