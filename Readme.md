@@ -1,6 +1,11 @@
 ## 简介
 一款取决于用户策略的资产管理平台
 
+## 在线展示
+http://103.146.179.91:8001/
+admin 
+admin
+
 ## 使用指南
 ```
 git clone https://github.com/tangxiaofeng7/XScan.git
