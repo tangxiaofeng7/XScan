@@ -30,6 +30,8 @@ func Setup() {
 
 	if err != nil {
 		g.Log().Fatalf("数据库连接错误", err)
+	} else {
+		g.Log().Info("数据连接成功")
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {

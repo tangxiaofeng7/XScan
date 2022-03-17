@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/gogf/gf/encoding/gjson"
+	"github.com/gogf/gf/encoding/gurl"
+	"github.com/gogf/gf/frame/g"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -74,7 +76,7 @@ func DelPolicylist(id int) (bool, int) {
 }
 
 //执行策略
-func DoPolicylist(id int) (bool, int) {
+func DoPolicylist(id int) (bool, string) {
 	var Policylist Policylist
 	maps := make(map[string]interface{})
 	maps["excute_time"] = "100"
@@ -84,21 +86,27 @@ func DoPolicylist(id int) (bool, int) {
 	if Policylist.Platform == "fofa" {
 
 		fmt.Println("fofa任务......")
-		fofaTotal, fofaTotalSuccess := FofaSearchTotal(Policylist.Rule)
-		fmt.Println("total总数为", fofaTotal)
 
-		if fofaTotalSuccess {
-			res := (fofaTotal + 500) / 500
+		fofaTotal, errmsg := FofaSearchTotal(Policylist.Rule)
+		fmt.Println("total总数为", fofaTotal)
+		fmt.Println("errmsg为", errmsg)
+
+		if errmsg == "true" {
+			res := (fofaTotal + 100) / 100
 			fmt.Println("res为", res)
 			for i := 1; i <= res; i++ {
-				FofaSearch(Policylist.Task, Policylist.Rule, 500, i)
+				FofaSearch(Policylist.Task, Policylist.Rule, 100, i)
 			}
-			return true, id
+			return true, errmsg
+		} else {
+			return false, errmsg
 		}
 
 	} else if Policylist.Platform == "zoomeye" {
 
-		fmt.Println("zoomeye任务")
+		fmt.Println("zoomeye任务......")
+		//ZoomeyeSearch(Policylist.Task, Policylist.Rule)
+
 	} else if Policylist.Platform == "hunter" {
 
 		fmt.Println("hunter任务......")
@@ -110,10 +118,10 @@ func DoPolicylist(id int) (bool, int) {
 			for i := 1; i <= res; i++ {
 				HunterSearch(Policylist.Task, Policylist.Rule, 100, i)
 			}
-			return true, id
+			return true, "id"
 		}
 	}
-	return true, id
+	return true, "id"
 }
 
 //fofa
@@ -155,7 +163,7 @@ func FofaSearch(task, rule string, size, page int) bool {
 	}
 }
 
-func FofaSearchTotal(rule string) (total int, total_success bool) {
+func FofaSearchTotal(rule string) (total int, errmsg string) {
 	email, key, ok := GetPlat("fofa")
 	if ok {
 		rule = base64.StdEncoding.EncodeToString([]byte(rule))
@@ -167,17 +175,28 @@ func FofaSearchTotal(rule string) (total int, total_success bool) {
 		}
 		defer res.Body.Close()
 		result, _ := ioutil.ReadAll(res.Body)
+
 		value, _ := gjson.LoadContent(string(result))
-		a := value.GetArray("size")
-		var b string
-		b = fmt.Sprintf("%v", a[0])
 
-		total, _ := strconv.Atoi(b)
+		//errmsg
+		fofaError := fmt.Sprintf("%v", value.GetArray("error"))
 
-		return total, true
+		fmt.Println("fofaError", fofaError)
+
+		if fofaError == "[true]" {
+			errmsg = fmt.Sprintf("%v", value.GetArray("errmsg"))
+			return 0, errmsg
+		} else {
+			a := value.GetArray("size")
+			var b string
+			b = fmt.Sprintf("%v", a[0])
+			total, _ := strconv.Atoi(b)
+			return total, "true"
+		}
 	} else {
-		return 0, false
+		return 0, "没有结果"
 	}
+
 }
 
 // hunter
@@ -248,4 +267,38 @@ func HunterSearchTotal(rule string) (total int, total_success bool) {
 	} else {
 		return 0, false
 	}
+}
+
+//Zoomeye 返回结果不含端口，且比较杂乱
+
+func ZoomeyeSearchTotal(rule string) (total int, errmsg string) {
+	_, password, ok := GetPlat("zoomeye")
+	if ok {
+		rule = gurl.Encode(rule)
+		url := fmt.Sprintf("https://api.zoomeye.org/host/search?query=%s&page=1", rule)
+		fmt.Println(url)
+		response := g.Client().SetHeader("API-KEY", password).GetContent(url)
+		value, _ := gjson.LoadContent(string(response))
+		total := value.GetArray("total")
+		fmt.Println(total)
+	}
+	return
+}
+
+func ZoomeyeSearch(task, rule string) (total int, errmsg string) {
+	_, password, ok := GetPlat("zoomeye")
+	if ok {
+		rule = gurl.Encode(rule)
+		url := fmt.Sprintf("https://api.zoomeye.org/web/search?query=%s&page=1", rule)
+		fmt.Println(url)
+		response := g.Client().SetHeader("API-KEY", password).GetContent(url)
+		value, _ := gjson.LoadContent(string(response))
+
+		for _, v := range value.GetArray("matches") {
+			fmt.Println(v.(map[string]interface{})["ip"])
+			fmt.Println(v.(map[string]interface{})["domains"])
+			fmt.Println(v.(map[string]interface{})["site"])
+		}
+	}
+	return
 }

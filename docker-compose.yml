@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    container_name: 'mysql_xcan'
+    container_name: 'mysql_scan'
     build: ./mysql
     environment:
       - TZ=Asia/Shanghai

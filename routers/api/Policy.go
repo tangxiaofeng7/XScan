@@ -113,17 +113,22 @@ func DelPolicy(c *gin.Context) {
 
 //DoPolicy
 func DoPolicy(c *gin.Context) {
-
+	var data string
 	json := make(map[string]interface{})
 	c.BindJSON(&json)
 	id := fmt.Sprintf("%v", json["id"])
 	idint, _ := strconv.Atoi(id)
-	models.DoPolicylist(idint)
-
+	Dobool, errmsg := models.DoPolicylist(idint)
+	if Dobool {
+		data = "查询正常"
+	} else {
+		data = errmsg
+	}
 	code := e.SUCCESS
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),
+		"data": data,
 	})
 }
