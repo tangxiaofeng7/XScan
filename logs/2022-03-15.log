@@ -1,9 +1,0 @@
-2022-03-15 18:24:33.736 [FATA] 数据库连接错误%!(EXTRA *errors.errorString=driver: bad connection) 
-Stack:
-1.  XScan/models.Setup
-    /Users/txf/Desktop/XScan/models/models.go:32
-2.  main.init.0
-    /Users/txf/Desktop/XScan/main.go:14
- 
-2022-03-15 18:25:06.295 [INFO] 数据连接成功 
-2022-03-15 18:25:06.304 [INFO] Actual pid is 22798 
