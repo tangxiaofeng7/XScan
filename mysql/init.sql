@@ -41,7 +41,7 @@ CREATE TABLE `platform` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 LOCK TABLES `platform` WRITE;
-INSERT INTO `platform` VALUES (1,'fofa','',''),(2,'hunter','','xxx-'),(3,'shodan','',''),(5,'360quake','','');
+INSERT INTO `platform` VALUES (1,'fofa','',''),(2,'hunter','',''),(3,'shodan','',''),(5,'360quake','','');
 UNLOCK TABLES;
 
 
