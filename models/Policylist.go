@@ -66,7 +66,7 @@ func AddPolicylist(data map[string]interface{}) {
 }
 
 func EditPolicylist(id int, data interface{}) bool {
-	db.Model(&Policylist{}).Where("id = ?", id).Updates(data)
+	db.Model(&Pocscanlist{}).Where("id = ?", id).Updates(data)
 	return true
 }
 

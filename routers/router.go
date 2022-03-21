@@ -19,6 +19,8 @@ func InitRouter() *gin.Engine {
 	r.GET("/api/downfofaList", api.DownFofaList)
 	r.GET("/api/downhunterList", api.DownHunterList)
 
+	r.GET("/api/xraysetup", api.GetXraysetup)
+
 	apiv1 := r.Group("/api")
 	apiv1.Use(utils.JWT())
 	{
@@ -35,11 +37,19 @@ func InitRouter() *gin.Engine {
 		//fofa结果
 		apiv1.GET("/fofalist", api.GetFofalist)
 		apiv1.POST("/fofalist", api.AddFofaWhite)
-		//apiv1.POST("/downfofaList", api.DownFofaList)
 
 		//hunter结果
 		apiv1.GET("/hunterlist", api.GetHunterlist)
 		apiv1.POST("/hunterlist", api.AddhunterWhite)
+
+		//扫描
+		apiv1.POST("/pocscan", api.AddPocScan)
+		apiv1.GET("/pocscanlist", api.GetPocscanlist)
+		apiv1.DELETE("/pocscanlist", api.DelPocscanlist)
+
+		//xray结果
+		apiv1.GET("/xrayres", api.GetXrayRes)
+		apiv1.DELETE("/xrayres", api.DelXrayRes)
 		//欢迎界面
 		apiv1.GET("/welcome", api.GetWelcome)
 		//用户管理
@@ -47,6 +57,7 @@ func InitRouter() *gin.Engine {
 		apiv1.GET("/current", api.CurrentUser)
 		//服务器状态
 		apiv1.GET("/serverInfo", api.GetServerInfo) // 获取服务器信息
+
 	}
 	return r
 }

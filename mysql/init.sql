@@ -41,7 +41,7 @@ CREATE TABLE `platform` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 LOCK TABLES `platform` WRITE;
-INSERT INTO `platform` VALUES (1,'fofa','',''),(2,'hunter','',''),(3,'shodan','',''),(5,'360quake','','');
+INSERT INTO `platform` VALUES (1,'fofa','',''),(2,'hunter','',''),(3,'shodan','',''),(4,'360quake','','');
 UNLOCK TABLES;
 
 
@@ -56,3 +56,14 @@ CREATE TABLE `policylist` (
                               `excute_time` varchar(255) DEFAULT NULL,
                               PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3;
+
+DROP TABLE IF EXISTS `xrayres`;
+CREATE TABLE `xrayres` (
+                           `id` int NOT NULL AUTO_INCREMENT,
+                           `url` varchar(255) DEFAULT NULL,
+                           `poc` varchar(255) DEFAULT NULL,
+                           `snapshot` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+                           `hash` varchar(255) DEFAULT NULL,
+                           `created_time` varchar(255) DEFAULT NULL,
+                           PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3

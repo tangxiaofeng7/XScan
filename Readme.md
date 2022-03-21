@@ -1,10 +1,6 @@
 ## 简介
 一款取决于用户策略的资产管理平台
 
-## 在线体验
-http://103.146.179.91:8001
-admin
-admin
 ## 使用指南
 ```
 git clone https://github.com/tangxiaofeng7/XScan.git
@@ -32,6 +28,7 @@ docker rmi $(docker images | grep "scan" | awk '{print $3}')
 ![img.png](images/sys.png)
 
 ## 最近更新
+[2022/3/21] 增加xray扫描</p>
 [2022/3/17] 优化fofa查询出错提示</p>
 [2022/3/15] 增加资产批量导出xlsx</p>
 [2022/3/13] 增加修改密码，增加平台系统展示</p>

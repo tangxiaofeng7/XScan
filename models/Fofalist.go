@@ -130,3 +130,16 @@ func GetValueByDay(updateTime string) (count int) {
 	db.Model(&Fofalist{}).Where("updated_time LIKE ?", "%"+updateTime+"%").Count(&count)
 	return
 }
+
+//
+func GetFofaForScan(maps interface{}) (fofalist []Fofalist) {
+	dbTmp := db
+	querys := maps.(map[string]interface{})
+
+	if querys["task"] != nil {
+		dbTmp = dbTmp.Where("task = ?", querys["task"].(string))
+	}
+	dbTmp.Where("iswhite = ?", false).Find(&fofalist)
+
+	return
+}
