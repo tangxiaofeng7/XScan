@@ -15,6 +15,26 @@ LOCK TABLES `auth` WRITE;
 INSERT INTO `auth` VALUES (1,'admin','admin');
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `hunterlist`;
+CREATE TABLE `hunterlist` (
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `task` varchar(255) DEFAULT NULL,
+                            `url` varchar(255) DEFAULT NULL,
+                            `title` varchar(255) DEFAULT NULL,
+                            `ip` varchar(255) DEFAULT NULL,
+                            `domain` varchar(255) DEFAULT NULL,
+                            `port` varchar(255) DEFAULT NULL,
+                            `protocol` varchar(255) DEFAULT NULL,
+                            `code` varchar(255) DEFAULT NULL,
+                            `number` varchar(255) DEFAULT NULL,
+                            `company` varchar(255) DEFAULT NULL,
+                            `isp` varchar(255) DEFAULT NULL,
+                            `iswhite` tinyint(1) DEFAULT NULL,
+                            `created_time` varchar(255) DEFAULT NULL,
+                            `updated_time` varchar(255) DEFAULT NULL,
+                            PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
+
 DROP TABLE IF EXISTS `fofalist`;
 CREATE TABLE `fofalist` (
                             `id` int NOT NULL AUTO_INCREMENT,
